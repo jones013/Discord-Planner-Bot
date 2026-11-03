@@ -1,4 +1,5 @@
 import discord
+from datetime import datetime
 from discord import app_commands
 import os
 from dotenv import load_dotenv
@@ -19,9 +20,14 @@ async def add(
     due: str
 ):
     print ("Add command")
-    assignments.append({"title": title, "due": due})
+    
+    # %Y = 4-digit year, %m = 2-digit month, %d = 2-digit day
+    due_date = datetime.strptime(due, "%m/%d/%Y")
+
+    print(due_date)        # Output: 2026-11-03 00:00:00
+    assignments.append({"title": title, "due": due_date})
     await interaction.response.send_message(
-        f"Added: {title} (due {due})"
+        f"Added: {title}\nDue: {due_date.strftime("%m/%d/%Y %H:%M:%S")}"
     )
 
 
@@ -36,10 +42,12 @@ async def schedule(interaction: discord.Interaction):
     number = 1
 
     for a in assignments:
-        message += f"{number}. {a['title']} - due {a['due']}\n"
+        formatted_date = a["due"].strftime("%m/%d/%Y %H:%M:%S")
+        message += f"{number}.\nAssignment: {a['title']}\nDue: {formatted_date}\n"
         number += 1
 
     await interaction.response.send_message(message)
+
 
 @tree.command(name="delete", description="Delete an assignment by queue number")
 async def delete(interaction: discord.Interaction, number: int):
