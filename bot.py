@@ -13,6 +13,7 @@ tree = app_commands.CommandTree(client)
 
 assignments = []
 
+#Adrian did this part.
 def parse_date(date_str: str):
     #function to not double the strptime for due and reminders
     for fmt in ("%m/%d/%Y %H:%M", "%m/%d/%Y"):
@@ -21,7 +22,8 @@ def parse_date(date_str: str):
         except ValueError:
             continue
     return None
-
+    
+#Adrian did this part.
 @tasks.loop(seconds=30)
 async def check_due_dates():
     #Checks every 30 seconds for the assignments that are due
@@ -49,7 +51,7 @@ async def check_due_dates():
 
 
 
-
+#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @tree.command(name="add", description="Add an assignment with a custom reminder alert date")
 @app_commands.describe(
     title="Assignment title",
@@ -57,7 +59,7 @@ async def check_due_dates():
     remind_at="Set reminder with (MM/DD/YYYY or MM/DD/YYYY HH:MM)")
 
 async def add(
-    interaction: discord.Interaction,
+    interaction: discord.Interaction,   #Anna added this part
     title: str,
     due: str,
     remind_at: str
@@ -81,14 +83,14 @@ async def add(
 
     assignments.sort(key=lambda x: x["due"])
 
-    due_str = due_date.strftime("%m/%d/%Y %H:%M")
+    due_str = due_date.strftime("%m/%d/%Y %H:%M")  #Anna added this part
     remind_str = reminder_time.strftime("%m/%d/%Y %H:%M")
 
     await interaction.response.send_message(
         f"Added: {title}\nDue: {due_str}\n Reminder Set For: {remind_str}"
     )
 
-
+#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @tree.command(name="schedule", description="See all added assignments")
 async def schedule(interaction: discord.Interaction):
     print ("Schedule command")
@@ -100,7 +102,7 @@ async def schedule(interaction: discord.Interaction):
     number = 1
 
     for a in assignments:
-        due_str = a["due"].strftime("%m/%d/%Y %H:%M")
+        due_str = a["due"].strftime("%m/%d/%Y %H:%M")  #Anna added this part
         remind_str = a["reminder_time"].strftime("%m/%d/%Y %H:%M")
         status = "(Reminder Sent)"  if a["reminded"] else "(Pending)"
         message += (f"**{number}.** {a['title']} {status}\n"
@@ -110,7 +112,7 @@ async def schedule(interaction: discord.Interaction):
 
     await interaction.response.send_message(message)
 
-
+#Anna did this part.
 @tree.command(name="delete", description="Delete an assignment by queue number")
 async def delete(interaction: discord.Interaction, number: int):
     if number < 1 or number > len(assignments):
@@ -126,7 +128,7 @@ async def delete(interaction: discord.Interaction, number: int):
     )
 
 
-
+#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @client.event
 async def on_ready():
     if not check_due_dates.is_running():
