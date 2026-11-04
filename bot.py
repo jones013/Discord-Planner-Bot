@@ -1,3 +1,6 @@
+"""Discord bot commands for the Planner bot."""
+"""SQLite functions for storing and taking assignments."""
+
 import discord
 from database import (
     init_db,
@@ -23,8 +26,15 @@ if not token:
 client = discord.Client(intents=discord.Intents.default())
 tree = app_commands.CommandTree(client)
 
-def parse_date(date_str: str):
-    #function to not double the strptime for due and reminders
+def parse_date(date_str: str):        #function to not double the strptime for due and reminders
+    """Convert a due date string into a datetime object.
+
+    Args:
+        date_str: The due date typed by the user.
+
+    Returns:
+        The parsed datetime, or None if the format is invalid.
+    """
     for fmt in ("%m/%d/%Y %H:%M", "%m/%d/%Y"):
         try:
             return datetime.strptime(date_str.strip(), fmt)
@@ -74,6 +84,13 @@ async def add(
     due: str,
     remind_at: str
 ):
+    """Add an assignment and confirm it in the channel.
+
+    Args:
+        interaction: The Discord interaction that triggered the command.
+        title: Name of the assignment.
+        due: Due date and time as a string.
+    """
     print ("Add command")
     
     # %Y = 4-digit year, %m = 2-digit month, %d = 2-digit day
@@ -104,6 +121,11 @@ async def add(
 #Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @tree.command(name="schedule", description="See all added assignments")
 async def schedule(interaction: discord.Interaction):
+    """Show all assignments, or "No assignments yet" if there are none.
+
+    Args:
+        interaction: The Discord interaction that triggered the command.
+    """
     print ("Schedule command")
 
     message = "**Assignment Queue**\n"
@@ -137,6 +159,14 @@ async def schedule(interaction: discord.Interaction):
 #Anna did this part.
 @tree.command(name="delete", description="Delete an assignment by queue number")
 async def delete(interaction: discord.Interaction, number: int):
+    """Remove an assignment by its index number and confirm in the channel.
+
+    Sends an error message if no assignment has that index.
+
+    Args:
+        interaction: The Discord interaction that triggered the command.
+        index: Position of the assignment in the schedule list.
+    """
     events = get_events(interaction.guild_id)
 
     if number < 1 or number > len(events):
@@ -156,6 +186,7 @@ async def delete(interaction: discord.Interaction, number: int):
 #Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @client.event
 async def on_ready():
+    """Sync slash commands with Discord and print the connection status."""
     if not check_due_dates.is_running():
         check_due_dates.start()
     
