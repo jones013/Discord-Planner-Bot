@@ -41,7 +41,7 @@ async def check_due_dates():
             if channel:
                 due_str = item["due"].strftime("%m/%d/%Y %H:%M")
                 try:
-                    await channel.send(f"<@{item['user_id']}> **Reminder:** Assignment `{item['title']}` is due now!" 
+                    await channel.send(f"<@{item['user_id']}> **Reminder:** Assignment `{item['title']}` is due soon!\n" 
                                        f"Final deadline is: {due_str}")
                 except discord.HTTPException:
                     pass
@@ -87,7 +87,7 @@ async def add(
     remind_str = reminder_time.strftime("%m/%d/%Y %H:%M")
 
     await interaction.response.send_message(
-        f"Added: {title}\nDue: {due_str}\n Reminder Set For: {remind_str}"
+        f"Added: {title}\nDue: {due_str}\nReminder Set For: {remind_str}"
     )
 
 #Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
