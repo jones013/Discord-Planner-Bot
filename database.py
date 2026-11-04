@@ -1,9 +1,11 @@
+"""SQLite storage for the Planner bot: creates the events table and saves, lists, deletes, and flags reminders for assignments."""
 import sqlite3
 
 DB_PATH = "events.db"
 
 
 def init_db():
+    """Create the events table in the database if it does not already exist."""
     with sqlite3.connect(DB_PATH) as connection:
         connection.execute("""
             CREATE TABLE IF NOT EXISTS events (
@@ -42,6 +44,14 @@ def add_event(guild_id, title, due, reminder_time, channel_id, user_id):
 
 
 def get_events(guild_id):
+    """Return all stored assignments for one server.
+
+    Args:
+        guild_id: ID of the Discord server to look up.
+
+    Returns:
+        A list of that server's assignments.
+    """
     with sqlite3.connect(DB_PATH) as connection:
         connection.row_factory = sqlite3.Row
         return connection.execute(
@@ -56,6 +66,11 @@ def get_events(guild_id):
 
 
 def get_due_events():
+    """Return assignments whose reminder time has arrived and have not been reminded yet.
+
+    Returns:
+        A list of assignments that need a reminder sent.
+    """
     from datetime import datetime
 
     with sqlite3.connect(DB_PATH) as connection:
@@ -71,6 +86,12 @@ def get_due_events():
 
 
 def delete_event(event_id, guild_id):
+    """Remove an assignment from one server.
+
+    Args:
+        event_id: ID of the assignment to delete.
+        guild_id: ID of the server, so only that server's data is affected.
+    """
     with sqlite3.connect(DB_PATH) as connection:
         connection.execute(
             "DELETE FROM events WHERE id = ? AND guild_id = ?",
@@ -80,6 +101,11 @@ def delete_event(event_id, guild_id):
 
 
 def mark_reminded(event_id):
+    """Mark an assignment as reminded so it is not reminded again.
+
+    Args:
+        event_id: ID of the assignment that was reminded.
+    """
     with sqlite3.connect(DB_PATH) as connection:
         connection.execute(
             "UPDATE events SET reminded = 1 WHERE id = ?",
