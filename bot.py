@@ -31,7 +31,8 @@ def parse_date(date_str: str):
         except ValueError:
             continue
     return None
-
+    
+#Adrian did this part.
 @tasks.loop(seconds=30)
 async def check_due_dates():
     for item in get_due_events():
@@ -60,7 +61,7 @@ async def check_due_dates():
 
 
 
-
+#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @tree.command(name="add", description="Add an assignment with a custom reminder alert date")
 @app_commands.describe(
     title="Assignment title",
@@ -68,7 +69,7 @@ async def check_due_dates():
     remind_at="Set reminder with (MM/DD/YYYY or MM/DD/YYYY HH:MM)")
 
 async def add(
-    interaction: discord.Interaction,
+    interaction: discord.Interaction,   #Anna added this part
     title: str,
     due: str,
     remind_at: str
@@ -93,14 +94,14 @@ async def add(
     )
 
 
-    due_str = due_date.strftime("%m/%d/%Y %H:%M")
+    due_str = due_date.strftime("%m/%d/%Y %H:%M")  #Anna added this part
     remind_str = reminder_time.strftime("%m/%d/%Y %H:%M")
 
     await interaction.response.send_message(
-        f"Added: {title}\nDue: {due_str}\n Reminder Set For: {remind_str}"
+        f"Added: {title}\nDue: {due_str}\nReminder Set For: {remind_str}"
     )
 
-
+#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @tree.command(name="schedule", description="See all added assignments")
 async def schedule(interaction: discord.Interaction):
     print ("Schedule command")
@@ -133,7 +134,7 @@ async def schedule(interaction: discord.Interaction):
 
     await interaction.response.send_message(message)
 
-
+#Anna did this part.
 @tree.command(name="delete", description="Delete an assignment by queue number")
 async def delete(interaction: discord.Interaction, number: int):
     events = get_events(interaction.guild_id)
@@ -152,7 +153,7 @@ async def delete(interaction: discord.Interaction, number: int):
     )
 
 
-
+#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @client.event
 async def on_ready():
     if not check_due_dates.is_running():
