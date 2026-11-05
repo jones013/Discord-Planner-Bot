@@ -1,0 +1,8 @@
+@startuml packages
+set namespaceSeparator none
+package "bot" as bot {
+}
+package "database" as database {
+}
+bot --> database
+@enduml
