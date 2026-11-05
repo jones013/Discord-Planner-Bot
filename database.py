@@ -1,4 +1,6 @@
-"""SQLite storage for the Planner bot: creates the events table and saves, lists, deletes, and flags reminders for assignments."""
+"""SQLite storage for the Planner bot: creates the events table and saves, 
+lists, deletes, and flags reminders for assignments."""
+from datetime import datetime
 import sqlite3
 
 DB_PATH = "events.db"
@@ -22,7 +24,8 @@ def init_db():
         connection.commit()
 
 
-def add_event(guild_id, title, due, reminder_time, channel_id, user_id):
+def add_event(guild_id, title, due, reminder_time, channel_id, user_id): # pylint: disable=too-many-arguments,too-many-positional-arguments
+    """add event to database"""
     with sqlite3.connect(DB_PATH) as connection:
         cursor = connection.execute(
             """
@@ -41,7 +44,6 @@ def add_event(guild_id, title, due, reminder_time, channel_id, user_id):
         )
         connection.commit()
         return cursor.lastrowid
-
 
 def get_events(guild_id):
     """Return all stored assignments for one server.
@@ -71,8 +73,6 @@ def get_due_events():
     Returns:
         A list of assignments that need a reminder sent.
     """
-    from datetime import datetime
-
     with sqlite3.connect(DB_PATH) as connection:
         connection.row_factory = sqlite3.Row
         return connection.execute(

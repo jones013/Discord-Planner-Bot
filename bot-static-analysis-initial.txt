@@ -1,0 +1,22 @@
+************* Module bot
+bot.py:77:0: C0303: Trailing whitespace (trailing-whitespace)
+bot.py:80:41: C0303: Trailing whitespace (trailing-whitespace)
+bot.py:83:0: C0301: Line too long (110/100) (line-too-long)
+bot.py:160:0: C0303: Trailing whitespace (trailing-whitespace)
+bot.py:165:0: C0304: Final newline missing (missing-final-newline)
+bot.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+bot.py:26:0: C0116: Missing function or method docstring (missing-function-docstring)
+bot.py:36:0: C0116: Missing function or method docstring (missing-function-docstring)
+bot.py:70:0: C0116: Missing function or method docstring (missing-function-docstring)
+bot.py:105:0: C0116: Missing function or method docstring (missing-function-docstring)
+bot.py:138:0: C0116: Missing function or method docstring (missing-function-docstring)
+bot.py:157:0: C0116: Missing function or method docstring (missing-function-docstring)
+bot.py:10:0: C0411: standard import "datetime.datetime" should be placed before third party import "discord" and first party import "database.init_db"  (wrong-import-order)
+bot.py:11:0: C0411: third party import "discord.app_commands" should be placed before first party import "database.init_db"  (wrong-import-order)
+bot.py:12:0: C0411: standard import "os" should be placed before third party imports "discord", "discord.app_commands" and first party import "database.init_db"  (wrong-import-order)
+bot.py:13:0: C0411: third party import "discord.ext.tasks" should be placed before first party import "database.init_db"  (wrong-import-order)
+bot.py:14:0: C0411: third party import "dotenv.load_dotenv" should be placed before first party import "database.init_db"  (wrong-import-order)
+
+-----------------------------------
+Your code has been rated at 7.73/10
+

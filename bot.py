@@ -1,8 +1,12 @@
-"""Discord bot commands for the Planner bot."""
-"""SQLite functions for storing and taking assignments."""
+"""Discord bot commands for the Planner bot. SQLite functions for storing and taking assignments."""
 
+from datetime import datetime
+import os
 import discord
-from database import (
+from discord.ext import tasks
+from discord import app_commands
+from dotenv import load_dotenv
+from database import(
     init_db,
     add_event,
     get_events,
@@ -10,11 +14,7 @@ from database import (
     delete_event,
     mark_reminded,
 )
-from datetime import datetime
-from discord import app_commands
-import os
-from discord.ext import tasks
-from dotenv import load_dotenv
+
 load_dotenv()
 
 token  = os.environ.get("DISCORD_TOKEN")
@@ -41,10 +41,11 @@ def parse_date(date_str: str):        #function to not double the strptime for d
         except ValueError:
             continue
     return None
-    
+
 #Adrian did this part.
 @tasks.loop(seconds=30)
 async def check_due_dates():
+    """check due dates"""
     for item in get_due_events():
         channel = client.get_channel(item["channel_id"])
 
@@ -92,13 +93,14 @@ async def add(
         due: Due date and time as a string.
     """
     print ("Add command")
-    
+
     # %Y = 4-digit year, %m = 2-digit month, %d = 2-digit day
     due_date = parse_date(due)
-    reminder_time = parse_date(remind_at)   
+    reminder_time = parse_date(remind_at)
 
     if not due_date or not reminder_time:
-        await interaction.response.send_message("Invalid date format. Use MM/DD/YYYY HH:MM", ephemeral = True)
+        await interaction.response.send_message("Invalid date format. Use MM/DD/YYYY HH:MM",
+            ephemeral = True)
         return
 
     add_event(
@@ -189,7 +191,7 @@ async def on_ready():
     """Sync slash commands with Discord and print the connection status."""
     if not check_due_dates.is_running():
         check_due_dates.start()
-    
+
     await tree.sync()
     print("Bot is ready")
 
