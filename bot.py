@@ -42,7 +42,6 @@ def parse_date(date_str: str):        #function to not double the strptime for d
             continue
     return None
 
-#Adrian did this part.
 @tasks.loop(seconds=30)
 async def check_due_dates():
     """check due dates"""
@@ -71,8 +70,6 @@ async def check_due_dates():
             pass
 
 
-
-#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @tree.command(name="add", description="Add an assignment with a custom reminder alert date")
 @app_commands.describe(
     title="Assignment title",
@@ -80,7 +77,7 @@ async def check_due_dates():
     remind_at="Set reminder with (MM/DD/YYYY or MM/DD/YYYY HH:MM)")
 
 async def add(
-    interaction: discord.Interaction,   #Anna added this part
+    interaction: discord.Interaction,
     title: str,
     due: str,
     remind_at: str
@@ -113,14 +110,13 @@ async def add(
     )
 
 
-    due_str = due_date.strftime("%m/%d/%Y %H:%M")  #Anna added this part
+    due_str = due_date.strftime("%m/%d/%Y %H:%M")  
     remind_str = reminder_time.strftime("%m/%d/%Y %H:%M")
 
     await interaction.response.send_message(
         f"Added: {title}\nDue: {due_str}\nReminder Set For: {remind_str}"
     )
 
-#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
 @tree.command(name="schedule", description="See all added assignments")
 async def schedule(interaction: discord.Interaction):
     """Show all assignments, or "No assignments yet" if there are none.
@@ -158,7 +154,6 @@ async def schedule(interaction: discord.Interaction):
 
     await interaction.response.send_message(message)
 
-#Anna did this part.
 @tree.command(name="delete", description="Delete an assignment by queue number")
 async def delete(interaction: discord.Interaction, number: int):
     """Remove an assignment by its index number and confirm in the channel.
@@ -183,9 +178,7 @@ async def delete(interaction: discord.Interaction, number: int):
     await interaction.response.send_message(
         f"Deleted: {event['title']}"
     )
-
-
-#Michael coded this part in VS Code; Anna pushed it to the GitHub repo.
+#Michael coded this part
 @client.event
 async def on_ready():
     """Sync slash commands with Discord and print the connection status."""
